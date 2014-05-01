@@ -1,0 +1,71 @@
+{
+    "name": "philiprehberger/php-money",
+    "description": "Immutable Money value object with currency support, formatting, arithmetic, and Laravel Eloquent cast.",
+    "type": "library",
+    "keywords": [
+        "money",
+        "currency",
+        "value-object",
+        "laravel",
+        "eloquent",
+        "cast",
+        "finance"
+    ],
+    "homepage": "https://github.com/philiprehberger/php-money",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Philip Rehberger",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "ext-intl": "*"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.0|^10.0",
+        "phpunit/phpunit": "^11.0",
+        "laravel/pint": "^1.0",
+        "phpstan/phpstan": "^2.0"
+    },
+    "suggest": {
+        "illuminate/database": "Required for Eloquent Money cast (^11.0|^12.0)"
+    },
+    "autoload": {
+        "psr-4": {
+            "PhilipRehberger\\Money\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhilipRehberger\\Money\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "PhilipRehberger\\Money\\Laravel\\MoneyServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test:coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text",
+        "pint": "vendor/bin/pint",
+        "phpstan": "vendor/bin/phpstan analyse",
+        "check": [
+            "@pint --test",
+            "@phpstan",
+            "@test"
+        ]
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
