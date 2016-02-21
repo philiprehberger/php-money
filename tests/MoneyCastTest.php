@@ -26,7 +26,7 @@ class MoneyCastTest extends TestCase
         $this->cast = new MoneyCast('USD');
 
         // Anonymous model stub — we only need it as a parameter placeholder
-        $this->model = new class extends Model {};
+        $this->model = new class () extends Model {};
     }
 
     // -------------------------------------------------------------------------

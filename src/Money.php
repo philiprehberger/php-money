@@ -22,13 +22,14 @@ use Stringable;
 final class Money implements JsonSerializable, Stringable
 {
     /**
-     * @param int      $amount   Amount in the smallest unit (e.g. cents)
+     * @param int $amount Amount in the smallest unit (e.g. cents)
      * @param Currency $currency The currency of this money value
      */
     public function __construct(
         private readonly int $amount,
         private readonly Currency $currency,
-    ) {}
+    ) {
+    }
 
     // -------------------------------------------------------------------------
     // Static factories
@@ -193,10 +194,11 @@ final class Money implements JsonSerializable, Stringable
      * Example: Money::USD(1000)->allocate([1, 1, 1])
      *   → [Money::USD(334), Money::USD(333), Money::USD(333)]
      *
-     * @param  array<int|float> $ratios
-     * @return self[]
+     * @param array<int|float> $ratios
      *
      * @throws InvalidAmountException when ratios array is empty or all-zero/negative
+     *
+     * @return self[]
      */
     public function allocate(array $ratios): array
     {
@@ -331,8 +333,8 @@ final class Money implements JsonSerializable, Stringable
      * is used for proper locale-aware output. The locale defaults to the
      * current system locale or 'en_US' as fallback.
      *
-     * @param  string|null $locale A BCP 47 locale string (e.g. 'en_US', 'de_DE', 'fr_FR').
-     *                             Defaults to 'en_US'.
+     * @param string|null $locale A BCP 47 locale string (e.g. 'en_US', 'de_DE', 'fr_FR').
+     *                            Defaults to 'en_US'.
      */
     public function format(?string $locale = null): string
     {

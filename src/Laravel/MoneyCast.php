@@ -34,12 +34,13 @@ class MoneyCast implements CastsAttributes
 {
     public function __construct(
         private readonly string $defaultCurrency = 'USD',
-    ) {}
+    ) {
+    }
 
     /**
      * Transform the stored database value into a Money instance.
      *
-     * @param  array<string, mixed> $attributes
+     * @param array<string, mixed> $attributes
      */
     public function get(Model $model, string $key, mixed $value, array $attributes): ?Money
     {
@@ -84,7 +85,7 @@ class MoneyCast implements CastsAttributes
     /**
      * Transform the Money instance into a storable JSON string.
      *
-     * @param  array<string, mixed> $attributes
+     * @param array<string, mixed> $attributes
      */
     public function set(Model $model, string $key, mixed $value, array $attributes): ?string
     {
