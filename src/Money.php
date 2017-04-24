@@ -166,7 +166,7 @@ final class Money implements JsonSerializable, Stringable
      */
     public function divide(int|float $divisor): self
     {
-        if ($divisor == 0) {
+        if ((float) $divisor === 0.0) {
             throw InvalidAmountException::forDivisionByZero();
         }
 
