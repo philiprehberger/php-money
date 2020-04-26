@@ -1,6 +1,6 @@
 {
     "name": "philiprehberger/php-money",
-    "description": "Immutable Money value object with currency support, formatting, arithmetic, and Laravel Eloquent cast.",
+    "description": "Immutable Money value object with currency support, formatting, arithmetic, and Laravel Eloquent cast",
     "type": "library",
     "keywords": [
         "money",
