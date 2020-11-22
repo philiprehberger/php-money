@@ -68,6 +68,60 @@ final class Money implements JsonSerializable, Stringable
     }
 
     /**
+     * Return the smallest of the given Money values.
+     *
+     * All values must share the same currency.
+     *
+     * @throws CurrencyMismatchException
+     * @throws InvalidAmountException when no arguments are provided
+     */
+    public static function min(self ...$amounts): self
+    {
+        if (count($amounts) === 0) {
+            throw InvalidAmountException::forEmptyArguments('min');
+        }
+
+        $min = $amounts[0];
+
+        for ($i = 1; $i < count($amounts); $i++) {
+            $min->assertSameCurrency($amounts[$i]);
+
+            if ($amounts[$i]->amount < $min->amount) {
+                $min = $amounts[$i];
+            }
+        }
+
+        return $min;
+    }
+
+    /**
+     * Return the largest of the given Money values.
+     *
+     * All values must share the same currency.
+     *
+     * @throws CurrencyMismatchException
+     * @throws InvalidAmountException when no arguments are provided
+     */
+    public static function max(self ...$amounts): self
+    {
+        if (count($amounts) === 0) {
+            throw InvalidAmountException::forEmptyArguments('max');
+        }
+
+        $max = $amounts[0];
+
+        for ($i = 1; $i < count($amounts); $i++) {
+            $max->assertSameCurrency($amounts[$i]);
+
+            if ($amounts[$i]->amount > $max->amount) {
+                $max = $amounts[$i];
+            }
+        }
+
+        return $max;
+    }
+
+    /**
      * Create a money value from an amount (in smallest unit) and a currency code string.
      */
     public static function of(int $amount, string $currencyCode): self
@@ -251,6 +305,25 @@ final class Money implements JsonSerializable, Stringable
             fn (int $amount) => new self($amount, $this->currency),
             $results,
         );
+    }
+
+    /**
+     * Allocate this money equally among the given number of parts.
+     *
+     * Shorthand for `allocate(array_fill(0, $parts, 1))`. Any remainder
+     * cents are distributed one per part starting from the first.
+     *
+     * @throws InvalidAmountException when parts is less than 1
+     *
+     * @return self[]
+     */
+    public function allocateEqual(int $parts): array
+    {
+        if ($parts < 1) {
+            throw InvalidAmountException::forInvalidParts();
+        }
+
+        return $this->allocate(array_fill(0, $parts, 1));
     }
 
     // -------------------------------------------------------------------------
