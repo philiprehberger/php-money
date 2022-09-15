@@ -68,6 +68,80 @@ final class Money implements JsonSerializable, Stringable
     }
 
     /**
+     * Sum all given Money values. All must share the same currency.
+     *
+     * @throws CurrencyMismatchException
+     */
+    public static function sum(self $first, self ...$rest): self
+    {
+        $total = $first->amount;
+
+        foreach ($rest as $money) {
+            $first->assertSameCurrency($money);
+            $total += $money->amount;
+        }
+
+        return new self($total, $first->currency);
+    }
+
+    /**
+     * Average of all given Money values (integer division). All must share the same currency.
+     *
+     * @throws CurrencyMismatchException
+     */
+    public static function avg(self $first, self ...$rest): self
+    {
+        $sum = self::sum($first, ...$rest);
+        $count = 1 + count($rest);
+
+        return new self((int) round($sum->amount / $count, 0, PHP_ROUND_HALF_UP), $first->currency);
+    }
+
+    /**
+     * Return the smallest of the given Money values.
+     *
+     * All values must share the same currency.
+     *
+     * @throws CurrencyMismatchException
+     */
+    public static function minimum(self $first, self ...$rest): self
+    {
+        $min = $first;
+
+        foreach ($rest as $money) {
+            $first->assertSameCurrency($money);
+
+            if ($money->amount < $min->amount) {
+                $min = $money;
+            }
+        }
+
+        return $min;
+    }
+
+    /**
+     * Return the largest of the given Money values.
+     *
+     * All values must share the same currency.
+     *
+     * @throws CurrencyMismatchException
+     */
+    public static function maximum(self $first, self ...$rest): self
+    {
+        $max = $first;
+
+        foreach ($rest as $money) {
+            $first->assertSameCurrency($money);
+
+            if ($money->amount > $max->amount) {
+                $max = $money;
+            }
+        }
+
+        return $max;
+    }
+
+    /**
      * Return the smallest of the given Money values.
      *
      * All values must share the same currency.
@@ -204,29 +278,43 @@ final class Money implements JsonSerializable, Stringable
     }
 
     /**
-     * Multiply by a numeric factor. The result is rounded half-up.
+     * Multiply by a numeric factor. The result is rounded using the given mode (default HALF_UP).
      */
-    public function multiply(int|float $factor): self
+    public function multiply(int|float $factor, ?RoundingMode $roundingMode = null): self
     {
-        $result = (int) round($this->amount * $factor, 0, PHP_ROUND_HALF_UP);
+        $mode = $roundingMode ?? RoundingMode::HALF_UP;
+        $result = $mode->round($this->amount * $factor);
 
         return new self($result, $this->currency);
     }
 
     /**
-     * Divide by a numeric divisor. The result is rounded half-up.
+     * Divide by a numeric divisor. The result is rounded using the given mode (default HALF_UP).
      *
      * @throws InvalidAmountException when divisor is zero
      */
-    public function divide(int|float $divisor): self
+    public function divide(int|float $divisor, ?RoundingMode $roundingMode = null): self
     {
         if ((float) $divisor === 0.0) {
             throw InvalidAmountException::forDivisionByZero();
         }
 
-        $result = (int) round($this->amount / $divisor, 0, PHP_ROUND_HALF_UP);
+        $mode = $roundingMode ?? RoundingMode::HALF_UP;
+        $result = $mode->round($this->amount / $divisor);
 
         return new self($result, $this->currency);
+    }
+
+    /**
+     * Convert to another currency using the given exchange rate.
+     *
+     * The new amount is calculated as: round(current_amount * rate).
+     */
+    public function convertTo(Currency $target, float $rate): self
+    {
+        $newAmount = (int) round($this->amount * $rate, 0, PHP_ROUND_HALF_UP);
+
+        return new self($newAmount, $target);
     }
 
     /**

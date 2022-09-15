@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-03-27
+
+### Added
+- `Money::sum()`, `Money::avg()`, `Money::minimum()`, `Money::maximum()` collection operations
+- `RoundingMode` enum with HALF_UP, HALF_DOWN, HALF_EVEN, CEILING, and FLOOR modes
+- `Money::convertTo()` for rate-based currency conversion
+
 ## [1.2.0] - 2026-03-22
 
 ### Added
