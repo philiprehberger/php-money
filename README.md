@@ -1,13 +1,8 @@
 # PHP Money
 
-[![CI](https://github.com/philiprehberger/php-money/actions/workflows/tests.yml/badge.svg)](https://github.com/philiprehberger/php-money/actions/workflows/tests.yml)
-[![Packagist Version](https://img.shields.io/packagist/v/philiprehberger/php-money.svg)](https://packagist.org/packages/philiprehberger/php-money)
-[![GitHub Release](https://img.shields.io/github/v/release/philiprehberger/php-money)](https://github.com/philiprehberger/php-money/releases)
-[![Last Updated](https://img.shields.io/github/last-commit/philiprehberger/php-money)](https://github.com/philiprehberger/php-money/commits/main)
-[![License](https://img.shields.io/github/license/philiprehberger/php-money)](LICENSE)
-[![Bug Reports](https://img.shields.io/github/issues/philiprehberger/php-money/bug)](https://github.com/philiprehberger/php-money/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
-[![Feature Requests](https://img.shields.io/github/issues/philiprehberger/php-money/enhancement)](https://github.com/philiprehberger/php-money/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
-[![Sponsor](https://img.shields.io/badge/sponsor-GitHub%20Sponsors-ec6cb9)](https://github.com/sponsors/philiprehberger)
+[![Tests](https://github.com/philiprehberger/php-money/actions/workflows/tests.yml/badge.svg)](https://github.com/philiprehberger/php-money/actions/workflows/tests.yml)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/philiprehberger/php-money.svg)](https://packagist.org/packages/philiprehberger/php-money)
+[![Last updated](https://img.shields.io/github/last-commit/philiprehberger/php-money)](https://github.com/philiprehberger/php-money/commits/main)
 
 Immutable Money value object with currency support, formatting, arithmetic, and Laravel Eloquent cast.
 
@@ -224,8 +219,21 @@ vendor/bin/pint --test
 
 ## Support
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Philip%20Rehberger-blue?logo=linkedin)](https://www.linkedin.com/in/philiprehberger/)
-[![Packages](https://img.shields.io/badge/All%20Packages-philiprehberger-orange?logo=github)](https://github.com/philiprehberger/packages)
+If you find this project useful:
+
+⭐ [Star the repo](https://github.com/philiprehberger/php-money)
+
+🐛 [Report issues](https://github.com/philiprehberger/php-money/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
+
+💡 [Suggest features](https://github.com/philiprehberger/php-money/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
+
+❤️ [Sponsor development](https://github.com/sponsors/philiprehberger)
+
+🌐 [All Open Source Projects](https://philiprehberger.com/open-source-packages)
+
+💻 [GitHub Profile](https://github.com/philiprehberger)
+
+🔗 [LinkedIn Profile](https://www.linkedin.com/in/philiprehberger)
 
 ## License
 
