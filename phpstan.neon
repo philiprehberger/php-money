@@ -1,18 +1,13 @@
-includes:
-    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
-
 parameters:
     level: 8
     paths:
         - src
     excludePaths:
+        - vendor
         - src/Laravel/MoneyServiceProvider.php
-    checkMissingIterableValueType: true
-    checkGenericClassInNonGenericObjectType: true
     treatPhpDocTypesAsCertain: false
     reportUnmatchedIgnoredErrors: false
     ignoreErrors:
-        # MoneyCast depends on illuminate/database which is optional (suggest-only)
         -
             message: '#(Class Illuminate\\|Interface Illuminate\\)#'
             path: src/Laravel/MoneyCast.php
