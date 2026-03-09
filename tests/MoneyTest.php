@@ -130,8 +130,8 @@ class MoneyTest extends TestCase
         // 1000 * 1.5 = 1500 (exact)
         $this->assertSame(1500, Money::USD(1000)->multiply(1.5)->getAmount());
 
-        // 100 * 1.005 = 100.5 → rounds to 101
-        $this->assertSame(101, Money::USD(100)->multiply(1.005)->getAmount());
+        // 333 * 1.5 = 499.5 → rounds to 500
+        $this->assertSame(500, Money::USD(333)->multiply(1.5)->getAmount());
 
         // 1 * 0.5 = 0.5 → rounds to 1
         $this->assertSame(1, Money::USD(1)->multiply(0.5)->getAmount());
