@@ -512,4 +512,16 @@ class MoneyTest extends TestCase
         $this->assertSame(0, $money->getAmount());
         $this->assertTrue($money->isZero());
     }
+
+    public function test_divide_by_zero_float_throws_exception(): void
+    {
+        $this->expectException(InvalidAmountException::class);
+        Money::USD(1000)->divide(0.0);
+    }
+
+    public function test_percentage_with_negative_value(): void
+    {
+        $result = Money::USD(10000)->percentage(-10);
+        $this->assertSame(-1000, $result->getAmount());
+    }
 }

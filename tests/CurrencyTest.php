@@ -207,4 +207,85 @@ class CurrencyTest extends TestCase
 
         $this->assertSame('USD', (string) $currency);
     }
+
+    // -------------------------------------------------------------------------
+    // Additional currency factory tests
+    // -------------------------------------------------------------------------
+
+    public function test_czk_factory(): void
+    {
+        $currency = Currency::CZK();
+        $this->assertSame('CZK', $currency->getCode());
+        $this->assertSame(2, $currency->getDecimalPlaces());
+    }
+
+    public function test_dkk_factory(): void
+    {
+        $currency = Currency::DKK();
+        $this->assertSame('DKK', $currency->getCode());
+        $this->assertSame(2, $currency->getDecimalPlaces());
+    }
+
+    public function test_huf_factory(): void
+    {
+        $currency = Currency::HUF();
+        $this->assertSame('HUF', $currency->getCode());
+        $this->assertSame(2, $currency->getDecimalPlaces());
+    }
+
+    public function test_krw_factory(): void
+    {
+        $currency = Currency::KRW();
+        $this->assertSame('KRW', $currency->getCode());
+        $this->assertSame(0, $currency->getDecimalPlaces());
+    }
+
+    public function test_nok_factory(): void
+    {
+        $currency = Currency::NOK();
+        $this->assertSame('NOK', $currency->getCode());
+        $this->assertSame(2, $currency->getDecimalPlaces());
+    }
+
+    public function test_nzd_factory(): void
+    {
+        $currency = Currency::NZD();
+        $this->assertSame('NZD', $currency->getCode());
+        $this->assertSame(2, $currency->getDecimalPlaces());
+    }
+
+    public function test_pln_factory(): void
+    {
+        $currency = Currency::PLN();
+        $this->assertSame('PLN', $currency->getCode());
+        $this->assertSame(2, $currency->getDecimalPlaces());
+    }
+
+    public function test_sek_factory(): void
+    {
+        $currency = Currency::SEK();
+        $this->assertSame('SEK', $currency->getCode());
+        $this->assertSame(2, $currency->getDecimalPlaces());
+    }
+
+    public function test_thb_factory(): void
+    {
+        $currency = Currency::THB();
+        $this->assertSame('THB', $currency->getCode());
+        $this->assertSame(2, $currency->getDecimalPlaces());
+    }
+
+    public function test_try_factory(): void
+    {
+        $currency = Currency::TRY();
+        $this->assertSame('TRY', $currency->getCode());
+        $this->assertSame(2, $currency->getDecimalPlaces());
+    }
+
+    public function test_zar_factory(): void
+    {
+        $currency = Currency::ZAR();
+        $this->assertSame('ZAR', $currency->getCode());
+        $this->assertSame(2, $currency->getDecimalPlaces());
+    }
 }

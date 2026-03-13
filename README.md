@@ -41,13 +41,7 @@ composer require philiprehberger/php-money
 
 ### Laravel
 
-The package auto-discovers `MoneyServiceProvider`. To publish the optional config file:
-
-```bash
-php artisan vendor:publish --tag=money-config
-```
-
-This creates `config/money.php` where you can set the default currency and locale.
+The package auto-discovers `MoneyServiceProvider`. No configuration is required.
 
 ---
 
