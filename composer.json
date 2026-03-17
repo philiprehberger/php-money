@@ -8,14 +8,14 @@
         "value-object",
         "laravel",
         "eloquent",
-        "cast",
-        "finance"
+        "cast"
     ],
     "homepage": "https://github.com/philiprehberger/php-money",
     "license": "MIT",
     "authors": [
         {
             "name": "Philip Rehberger",
+            "email": "me@philiprehberger.com",
             "role": "Developer"
         }
     ],
@@ -66,6 +66,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }
