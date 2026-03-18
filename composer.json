@@ -52,11 +52,11 @@
     "scripts": {
         "test": "vendor/bin/phpunit",
         "test:coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text",
-        "pint": "vendor/bin/pint",
-        "phpstan": "vendor/bin/phpstan analyse",
+        "lint": "vendor/bin/pint",
+        "analyse": "vendor/bin/phpstan analyse",
         "check": [
-            "@pint --test",
-            "@phpstan",
+            "@lint --test",
+            "@analyse",
             "@test"
         ]
     },

@@ -4,7 +4,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/philiprehberger/php-money.svg)](https://packagist.org/packages/philiprehberger/php-money)
 [![License](https://img.shields.io/github/license/philiprehberger/php-money)](LICENSE)
 
-An immutable Money value object for PHP 8.2+ with currency support, locale-aware formatting, arithmetic, proportional allocation, and an optional Laravel Eloquent cast.
+Immutable Money value object with currency support, formatting, arithmetic, and Laravel Eloquent cast.
 
 ## Requirements
 
