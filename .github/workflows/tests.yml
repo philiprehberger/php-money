@@ -2,10 +2,9 @@ name: Tests
 
 on:
   push:
-    branches: ["main", "master"]
-    tags: ['v*']
+    branches: ["main"]
   pull_request:
-    branches: ["main", "master"]
+    branches: ["main"]
 
 jobs:
   test:
