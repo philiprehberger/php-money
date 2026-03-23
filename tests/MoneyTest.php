@@ -247,6 +247,76 @@ class MoneyTest extends TestCase
     }
 
     // -------------------------------------------------------------------------
+    // Min / Max
+    // -------------------------------------------------------------------------
+
+    public function test_min_returns_smallest(): void
+    {
+        $a = Money::USD(500);
+        $b = Money::USD(200);
+        $c = Money::USD(800);
+
+        $result = Money::min($a, $b, $c);
+
+        $this->assertSame(200, $result->getAmount());
+    }
+
+    public function test_max_returns_largest(): void
+    {
+        $a = Money::USD(500);
+        $b = Money::USD(200);
+        $c = Money::USD(800);
+
+        $result = Money::max($a, $b, $c);
+
+        $this->assertSame(800, $result->getAmount());
+    }
+
+    public function test_min_single_value(): void
+    {
+        $a = Money::USD(500);
+
+        $this->assertSame(500, Money::min($a)->getAmount());
+    }
+
+    public function test_max_single_value(): void
+    {
+        $a = Money::USD(500);
+
+        $this->assertSame(500, Money::max($a)->getAmount());
+    }
+
+    public function test_min_currency_mismatch_throws(): void
+    {
+        $this->expectException(CurrencyMismatchException::class);
+
+        Money::min(Money::USD(100), Money::EUR(200));
+    }
+
+    public function test_max_currency_mismatch_throws(): void
+    {
+        $this->expectException(CurrencyMismatchException::class);
+
+        Money::max(Money::USD(100), Money::EUR(200));
+    }
+
+    public function test_min_no_arguments_throws(): void
+    {
+        $this->expectException(InvalidAmountException::class);
+        $this->expectExceptionMessage('at least one');
+
+        Money::min();
+    }
+
+    public function test_max_no_arguments_throws(): void
+    {
+        $this->expectException(InvalidAmountException::class);
+        $this->expectExceptionMessage('at least one');
+
+        Money::max();
+    }
+
+    // -------------------------------------------------------------------------
     // Currency mismatch
     // -------------------------------------------------------------------------
 
@@ -357,6 +427,55 @@ class MoneyTest extends TestCase
         $this->expectException(InvalidAmountException::class);
 
         Money::USD(1000)->allocate([0, 0]);
+    }
+
+    // -------------------------------------------------------------------------
+    // allocateEqual
+    // -------------------------------------------------------------------------
+
+    public function test_allocate_equal_even_division(): void
+    {
+        $parts = Money::USD(1000)->allocateEqual(2);
+
+        $this->assertCount(2, $parts);
+        $this->assertSame(500, $parts[0]->getAmount());
+        $this->assertSame(500, $parts[1]->getAmount());
+    }
+
+    public function test_allocate_equal_uneven_division(): void
+    {
+        $parts = Money::USD(1000)->allocateEqual(3);
+
+        $this->assertCount(3, $parts);
+        $this->assertSame(334, $parts[0]->getAmount());
+        $this->assertSame(333, $parts[1]->getAmount());
+        $this->assertSame(333, $parts[2]->getAmount());
+
+        $total = array_sum(array_map(fn ($m) => $m->getAmount(), $parts));
+        $this->assertSame(1000, $total);
+    }
+
+    public function test_allocate_equal_single_part(): void
+    {
+        $parts = Money::USD(1000)->allocateEqual(1);
+
+        $this->assertCount(1, $parts);
+        $this->assertSame(1000, $parts[0]->getAmount());
+    }
+
+    public function test_allocate_equal_zero_parts_throws(): void
+    {
+        $this->expectException(InvalidAmountException::class);
+        $this->expectExceptionMessage('at least 1');
+
+        Money::USD(1000)->allocateEqual(0);
+    }
+
+    public function test_allocate_equal_negative_parts_throws(): void
+    {
+        $this->expectException(InvalidAmountException::class);
+
+        Money::USD(1000)->allocateEqual(-1);
     }
 
     // -------------------------------------------------------------------------

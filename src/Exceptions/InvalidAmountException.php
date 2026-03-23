@@ -29,4 +29,14 @@ class InvalidAmountException extends InvalidArgumentException
     {
         return new self('Allocation ratios must all be non-negative and their sum must be greater than zero.');
     }
+
+    public static function forEmptyArguments(string $method): self
+    {
+        return new self(sprintf('%s() requires at least one Money argument.', $method));
+    }
+
+    public static function forInvalidParts(): self
+    {
+        return new self('Number of parts must be at least 1.');
+    }
 }

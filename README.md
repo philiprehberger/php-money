@@ -74,9 +74,24 @@ $a->isNegative();           // false
 ### Allocation
 
 ```php
-// Split $10.00 three ways
+// Split $10.00 three ways by ratio
 $parts = Money::USD(1000)->allocate([1, 1, 1]);
 // [334, 333, 333] — totals exactly 1000
+
+// Split equally (shorthand)
+$parts = Money::USD(1000)->allocateEqual(3);
+// [334, 333, 333]
+```
+
+### Min / Max
+
+```php
+$a = Money::USD(500);
+$b = Money::USD(200);
+$c = Money::USD(800);
+
+Money::min($a, $b, $c)->getAmount(); // 200
+Money::max($a, $b, $c)->getAmount(); // 800
 ```
 
 ### Formatting
@@ -124,6 +139,9 @@ $product->save();
 | `->divide(int\|float $divisor)` | Divide by a divisor | `Money` |
 | `->percentage(int\|float $percent)` | Calculate a percentage | `Money` |
 | `->allocate(int[] $ratios)` | Split proportionally without rounding loss | `Money[]` |
+| `->allocateEqual(int $parts)` | Split equally (remainder to first parts) | `Money[]` |
+| `Money::min(Money ...$amounts)` | Return the smallest value | `Money` |
+| `Money::max(Money ...$amounts)` | Return the largest value | `Money` |
 | `->equals(Money $other)` | Check equality | `bool` |
 | `->greaterThan(Money $other)` | Greater than comparison | `bool` |
 | `->lessThan(Money $other)` | Less than comparison | `bool` |

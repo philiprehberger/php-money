@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-03-22
+
+### Added
+- `Money::min(Money ...$amounts)` — returns the smallest value among the given Money instances
+- `Money::max(Money ...$amounts)` — returns the largest value among the given Money instances
+- `Money->allocateEqual(int $parts)` — convenience shorthand for equal-ratio allocation
+
 ## [1.1.1] - 2026-03-17
 
 ### Changed
@@ -56,6 +63,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Laravel Pint code-style configuration.
 - GitHub Actions CI pipeline for PHP 8.2, 8.3, and 8.4.
 
-[Unreleased]: https://github.com/philiprehberger/php-money/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/philiprehberger/php-money/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/philiprehberger/php-money/compare/v1.1.1...v1.2.0
+[1.1.1]: https://github.com/philiprehberger/php-money/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/philiprehberger/php-money/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/philiprehberger/php-money/releases/tag/v1.0.0
