@@ -1,8 +1,12 @@
 # PHP Money
 
-[![Tests](https://github.com/philiprehberger/php-money/actions/workflows/tests.yml/badge.svg)](https://github.com/philiprehberger/php-money/actions/workflows/tests.yml)
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/philiprehberger/php-money.svg)](https://packagist.org/packages/philiprehberger/php-money)
+[![CI](https://github.com/philiprehberger/php-money/actions/workflows/tests.yml/badge.svg)](https://github.com/philiprehberger/php-money/actions/workflows/tests.yml)
+[![Packagist Version](https://img.shields.io/packagist/v/philiprehberger/php-money.svg)](https://packagist.org/packages/philiprehberger/php-money)
+[![GitHub Release](https://img.shields.io/github/v/release/philiprehberger/php-money)](https://github.com/philiprehberger/php-money/releases)
+[![Last Updated](https://img.shields.io/github/last-commit/philiprehberger/php-money)](https://github.com/philiprehberger/php-money/commits/main)
 [![License](https://img.shields.io/github/license/philiprehberger/php-money)](LICENSE)
+[![Bug Reports](https://img.shields.io/github/issues/philiprehberger/php-money/bug)](https://github.com/philiprehberger/php-money/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
+[![Feature Requests](https://img.shields.io/github/issues/philiprehberger/php-money/enhancement)](https://github.com/philiprehberger/php-money/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
 [![Sponsor](https://img.shields.io/badge/sponsor-GitHub%20Sponsors-ec6cb9)](https://github.com/sponsors/philiprehberger)
 
 Immutable Money value object with currency support, formatting, arithmetic, and Laravel Eloquent cast.
@@ -84,6 +88,39 @@ $parts = Money::USD(1000)->allocateEqual(3);
 // [334, 333, 333]
 ```
 
+### Collection Operations
+
+```php
+$a = Money::USD(1000);
+$b = Money::USD(2000);
+$c = Money::USD(3000);
+
+Money::sum($a, $b, $c)->getAmount();     // 6000
+Money::avg($a, $b, $c)->getAmount();     // 2000
+Money::minimum($a, $b, $c)->getAmount(); // 1000
+Money::maximum($a, $b, $c)->getAmount(); // 3000
+```
+
+### Rounding Modes
+
+```php
+use PhilipRehberger\Money\RoundingMode;
+
+$price = Money::USD(1000);
+
+$price->multiply(1.005);                            // 1005 (HALF_UP default)
+$price->multiply(1.005, RoundingMode::HALF_DOWN);   // 1005
+$price->multiply(1.005, RoundingMode::FLOOR);       // 1005
+$price->multiply(1.005, RoundingMode::CEILING);     // 1005
+```
+
+### Currency Conversion
+
+```php
+$usd = Money::USD(10000); // $100.00
+$eur = $usd->convertTo(Currency::EUR(), 0.85); // €85.00
+```
+
 ### Min / Max
 
 ```php
@@ -132,17 +169,22 @@ $product->save();
 | `Money::of(int $amount, string $currency)` | Create instance for any currency code | `Money` |
 | `Money::zero(string $currency)` | Create zero-value instance | `Money` |
 | `Money::parse(string $value, string $currency)` | Parse a formatted string | `Money` |
+| `Money::sum(Money $first, Money ...$rest)` | Sum all money values | `Money` |
+| `Money::avg(Money $first, Money ...$rest)` | Average of all money values | `Money` |
+| `Money::minimum(Money $first, Money ...$rest)` | Return the smallest value | `Money` |
+| `Money::maximum(Money $first, Money ...$rest)` | Return the largest value | `Money` |
+| `Money::min(Money ...$amounts)` | Return the smallest value | `Money` |
+| `Money::max(Money ...$amounts)` | Return the largest value | `Money` |
 | `->getAmount()` | Get amount in smallest unit | `int` |
 | `->getCurrency()` | Get Currency instance | `Currency` |
 | `->add(Money $other)` | Add two money values | `Money` |
 | `->subtract(Money $other)` | Subtract two money values | `Money` |
-| `->multiply(int\|float $factor)` | Multiply by a factor | `Money` |
-| `->divide(int\|float $divisor)` | Divide by a divisor | `Money` |
+| `->multiply(int\|float $factor, ?RoundingMode $mode)` | Multiply by a factor | `Money` |
+| `->divide(int\|float $divisor, ?RoundingMode $mode)` | Divide by a divisor | `Money` |
 | `->percentage(int\|float $percent)` | Calculate a percentage | `Money` |
+| `->convertTo(Currency $target, float $rate)` | Convert to another currency | `Money` |
 | `->allocate(int[] $ratios)` | Split proportionally without rounding loss | `Money[]` |
 | `->allocateEqual(int $parts)` | Split equally (remainder to first parts) | `Money[]` |
-| `Money::min(Money ...$amounts)` | Return the smallest value | `Money` |
-| `Money::max(Money ...$amounts)` | Return the largest value | `Money` |
 | `->equals(Money $other)` | Check equality | `bool` |
 | `->greaterThan(Money $other)` | Greater than comparison | `bool` |
 | `->lessThan(Money $other)` | Less than comparison | `bool` |
@@ -153,6 +195,16 @@ $product->save();
 | `->isNegative()` | Check if amount is negative | `bool` |
 | `->format(string $locale = 'en_US')` | Locale-aware formatted string | `string` |
 | `->toArray()` | Serialise to array | `array` |
+
+### RoundingMode
+
+| Case | Value | Description |
+|------|-------|-------------|
+| `HALF_UP` | `half_up` | Round half away from zero (default) |
+| `HALF_DOWN` | `half_down` | Round half toward zero |
+| `HALF_EVEN` | `half_even` | Banker's rounding |
+| `CEILING` | `ceiling` | Round toward positive infinity |
+| `FLOOR` | `floor` | Round toward negative infinity |
 
 ### Exceptions
 
@@ -168,9 +220,13 @@ $product->save();
 composer install
 vendor/bin/phpunit
 vendor/bin/pint --test
-vendor/bin/phpstan analyse
 ```
+
+## Support
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Philip%20Rehberger-blue?logo=linkedin)](https://www.linkedin.com/in/philiprehberger/)
+[![Packages](https://img.shields.io/badge/All%20Packages-philiprehberger-orange?logo=github)](https://github.com/philiprehberger/packages)
 
 ## License
 
-MIT
+[MIT](LICENSE)
