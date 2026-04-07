@@ -215,6 +215,7 @@ $product->save();
 composer install
 vendor/bin/phpunit
 vendor/bin/pint --test
+vendor/bin/phpstan analyse
 ```
 
 ## Support

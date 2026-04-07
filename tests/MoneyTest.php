@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace PhilipRehberger\Money\Tests;
 
+use BadMethodCallException;
 use PhilipRehberger\Money\Currency;
 use PhilipRehberger\Money\Exceptions\CurrencyMismatchException;
+use PhilipRehberger\Money\Exceptions\DivisionByZeroException;
 use PhilipRehberger\Money\Exceptions\InvalidAmountException;
+use PhilipRehberger\Money\Exceptions\ParseException;
 use PhilipRehberger\Money\Money;
 use PHPUnit\Framework\TestCase;
 
@@ -642,5 +645,73 @@ class MoneyTest extends TestCase
     {
         $result = Money::USD(10000)->percentage(-10);
         $this->assertSame(-1000, $result->getAmount());
+    }
+
+    // -------------------------------------------------------------------------
+    // DivisionByZeroException / ParseException
+    // -------------------------------------------------------------------------
+
+    public function test_divide_by_zero_throws_division_by_zero_exception(): void
+    {
+        $this->expectException(DivisionByZeroException::class);
+        Money::USD(1000)->divide(0);
+    }
+
+    public function test_division_by_zero_exception_extends_invalid_amount_exception(): void
+    {
+        try {
+            Money::USD(1000)->divide(0);
+            $this->fail('Expected DivisionByZeroException');
+        } catch (DivisionByZeroException $e) {
+            $this->assertInstanceOf(InvalidAmountException::class, $e);
+        }
+    }
+
+    public function test_parse_invalid_string_throws_parse_exception(): void
+    {
+        $this->expectException(ParseException::class);
+        Money::parse('not-a-number', 'USD');
+    }
+
+    public function test_parse_exception_extends_invalid_amount_exception(): void
+    {
+        try {
+            Money::parse('garbage', 'USD');
+            $this->fail('Expected ParseException');
+        } catch (ParseException $e) {
+            $this->assertInstanceOf(InvalidAmountException::class, $e);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // ArrayAccess
+    // -------------------------------------------------------------------------
+
+    public function test_array_access_read_keys(): void
+    {
+        $money = Money::USD(1999);
+
+        $this->assertTrue(isset($money['amount']));
+        $this->assertTrue(isset($money['currency']));
+        $this->assertTrue(isset($money['minor']));
+        $this->assertFalse(isset($money['unknown']));
+
+        $this->assertSame('1999', $money['amount']);
+        $this->assertSame('USD', $money['currency']);
+        $this->assertSame(1999, $money['minor']);
+    }
+
+    public function test_array_access_set_throws(): void
+    {
+        $this->expectException(BadMethodCallException::class);
+        $money = Money::USD(100);
+        $money['amount'] = 200;
+    }
+
+    public function test_array_access_unset_throws(): void
+    {
+        $this->expectException(BadMethodCallException::class);
+        $money = Money::USD(100);
+        unset($money['amount']);
     }
 }
