@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace PhilipRehberger\Money;
 
+use ArrayAccess;
+use BadMethodCallException;
 use JsonSerializable;
 use NumberFormatter;
 use PhilipRehberger\Money\Exceptions\CurrencyMismatchException;
+use PhilipRehberger\Money\Exceptions\DivisionByZeroException;
 use PhilipRehberger\Money\Exceptions\InvalidAmountException;
+use PhilipRehberger\Money\Exceptions\ParseException;
 use Stringable;
 
 /**
@@ -18,8 +22,10 @@ use Stringable;
  * leaving the original unchanged.
  *
  * @phpstan-type MoneyArray array{amount: int, currency: string}
+ *
+ * @implements ArrayAccess<string, int|string>
  */
-final class Money implements JsonSerializable, Stringable
+final class Money implements ArrayAccess, JsonSerializable, Stringable
 {
     /**
      * @param int $amount Amount in the smallest unit (e.g. cents)
@@ -221,7 +227,7 @@ final class Money implements JsonSerializable, Stringable
      *   Money::parse('$19.99', 'USD')  → Money::USD(1999)
      *   Money::parse('€1.500,50', 'EUR') is not supported; pass normalised strings.
      *
-     * @throws InvalidAmountException when the string cannot be parsed
+     * @throws ParseException when the string cannot be parsed
      */
     public static function parse(string $formatted, string $currencyCode): self
     {
@@ -239,7 +245,7 @@ final class Money implements JsonSerializable, Stringable
         $cleaned = str_replace(',', '', $cleaned);
 
         if (! is_numeric($cleaned) || trim($cleaned) === '') {
-            throw InvalidAmountException::forString($formatted);
+            throw ParseException::forString($formatted);
         }
 
         $floatValue = (float) $cleaned;
@@ -291,12 +297,12 @@ final class Money implements JsonSerializable, Stringable
     /**
      * Divide by a numeric divisor. The result is rounded using the given mode (default HALF_UP).
      *
-     * @throws InvalidAmountException when divisor is zero
+     * @throws DivisionByZeroException when divisor is zero
      */
     public function divide(int|float $divisor, ?RoundingMode $roundingMode = null): self
     {
         if ((float) $divisor === 0.0) {
-            throw InvalidAmountException::forDivisionByZero();
+            throw DivisionByZeroException::create();
         }
 
         $mode = $roundingMode ?? RoundingMode::HALF_UP;
@@ -558,6 +564,44 @@ final class Money implements JsonSerializable, Stringable
     public function __toString(): string
     {
         return $this->format();
+    }
+
+    /**
+     * Read-only array access for `amount` (string minor units),
+     * `currency` (currency code), and `minor` (int minor units).
+     */
+    public function offsetExists(mixed $offset): bool
+    {
+        return $offset === 'amount' || $offset === 'currency' || $offset === 'minor';
+    }
+
+    /**
+     * @return int|string|null
+     */
+    public function offsetGet(mixed $offset): mixed
+    {
+        return match ($offset) {
+            'amount' => (string) $this->amount,
+            'currency' => $this->currency->getCode(),
+            'minor' => $this->amount,
+            default => null,
+        };
+    }
+
+    /**
+     * @throws BadMethodCallException always — Money is immutable
+     */
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        throw new BadMethodCallException('Money is immutable; cannot set offsets.');
+    }
+
+    /**
+     * @throws BadMethodCallException always — Money is immutable
+     */
+    public function offsetUnset(mixed $offset): void
+    {
+        throw new BadMethodCallException('Money is immutable; cannot unset offsets.');
     }
 
     // -------------------------------------------------------------------------

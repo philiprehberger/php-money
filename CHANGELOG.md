@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-04-06
+
+### Added
+- `DivisionByZeroException` (extends `InvalidAmountException`) thrown by `Money::divide()` when the divisor is zero
+- `ParseException` (extends `InvalidAmountException`) thrown by `Money::parse()` on malformed input
+- `Money` now implements `ArrayAccess` exposing read-only `amount` (string minor units), `currency` (code), and `minor` (int) keys; mutating offsets throw `BadMethodCallException`
+- PHPStan extension-installer allow-plugins entry, README and PR template static analysis check
+
 ## [1.3.1] - 2026-03-31
 
 ### Changed
